@@ -1,0 +1,180 @@
+<div>
+  <div class="card  mat-elevation-z8">
+    <h5 class="card-header d-flex justify-content-between" style="background-color: #42A5F5;">
+      <div>#{{reportDetail.formId}}</div>
+      <div>{{formatedDateAndTime}}</div>
+    </h5>
+    <div class="card-body row" style="font-size: small; color: gray">
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col row">
+            <div class="col">Patient Name</div>
+            <div class="col"><b>: {{reportDetail.patient.first_name}}</b></div>
+          </div>
+          <div class="col row">
+            <div class="col">Hospital Name</div>
+            <div class="col"><b>: {{reportDetail.hospital.hospitalName}}</b></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col row">
+            <div class="col">Doctor Name</div>
+            <div class="col"><b>: Dr. {{reportDetail.doctor.firstName}} {{reportDetail.doctor.lastName}}</b></div>
+          </div>
+          <div class="col row">
+            <div class="col">Referred</div>
+            <div class="col"><b>: {{referTo}}</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal reportDetail.formId fade 1" [id]="reportDetail.formId" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4>Form ID: {{reportDetail.formId}}</h4>
+              <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-row">
+                  <div class="form-group col-md-4">
+                    <label>Patient Name: <b>{{reportDetail.patient.first_name}}
+                        {{reportDetail.patient.last_name}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Compliant: <b>{{reportDetail.compliant}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Date:<b>{{formatedDateAndTime}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Diagnosis Type: <b>{{reportDetail.diagnosistype}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Doctor Name: <b>Dr. {{reportDetail.doctor.firstName}}
+                        {{reportDetail.doctor.lastName}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Examination: <b>{{reportDetail.examination}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Hospital Name: <b>{{reportDetail.hospital.hospitalName}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>ICD Description: <b>{{reportDetail.icdDescription}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Follow Up: <b>{{followUp}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>ICD 10 Code: <b>{{reportDetail.icd10Code}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Referred to: <b>{{referTo}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Remarks: <b>{{reportDetail.remarks}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Improvement Type: <b>{{reportDetail.improvementtype}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Illness Summary: <b>{{reportDetail.illnessSummary}}</b></label>
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label>Treatment Instructions: <b>{{reportDetail.treatmentInstructions}}</b></label>
+                  </div>
+                  <table class="table table-bordered">
+                    <th>Medicines</th>
+                    <tr *ngIf="reportDetail.medicineInfo.length===0" class="text-center">
+                      <h3>No Medicines prescribed</h3>
+                    </tr>
+                    <tr *ngIf="reportDetail.medicineInfo.length>0">
+                      <td>
+                        Name
+                      </td>
+                      <td>
+                        Dosage
+                      </td>
+                      <td>
+                        Remarks 
+                      </td>
+                      <td>
+                        Duration (days)
+                      </td>
+                    </tr>
+                    <tr *ngFor="let medicine of reportDetail.medicineInfo;">
+                      <td>
+                        <label>{{medicine.medicineName}}</label>
+                      </td>
+                      <td>
+                        <label>{{medicine.dosage}}</label>
+                      </td>
+                      <td>
+                        <label>{{medicine.remarks}}</label>
+                      </td>
+                      <td>
+                        <label>{{medicine.duration}}</label>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="modal fade" [id]="modalId" tabindex="-1" role="dialog"
+        aria-labelledby="questionnaireResponse" aria-hidden="true" *ngIf="reportDetail.questionnaireResponse.length>0">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 class="modal-title" id="exampleModalLabel">Questionnaire Response marked "Yes" by doctor</h2>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h3 *ngIf="reportDetail.questionnaireResponse.length===currentQuestionIndex+1">
+                <p style="color: green;"><b>Conclusion: {{currentQuestion?.question}}</b></p>
+              </h3>
+              <h3 *ngIf="reportDetail.questionnaireResponse.length>currentQuestionIndex+1">
+                <p><b>{{currentQuestion?.question}}</b></p>
+              </h3>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" *ngFor="let option of currentOptions; let i = index">
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    {{i+1}}. {{option.optionText}}
+                  </label>
+                </li>
+              </ul>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary" (click)="previousQuestionnaireResponse()" *ngIf="currentQuestionIndex>0">Previous</button>
+              <button type="button" class="btn btn-primary" (click)="populateQuestionnaireResponse()" *ngIf="reportDetail.questionnaireResponse.length>currentQuestionIndex+1">Next</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" *ngIf="reportDetail.questionnaireResponse.length===currentQuestionIndex+1">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-6" id="buttonContainer">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-primary" data-toggle="modal" id="toggleButton"
+              [attr.data-target]="uniqueId">View Consultation Details</button>
+          </div>
+          <div class="col" *ngIf="reportDetail.questionnaireResponse.length>0">
+            <button type="button" class="btn btn-primary" data-toggle="modal" id="toggleButton2"
+              [attr.data-target]="questionnaireResponseId" (click)="initResponse()">View Questionnaire response</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
